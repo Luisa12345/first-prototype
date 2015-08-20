@@ -1,0 +1,41 @@
+class BlackBall  {  // dominant feeling
+  
+  float r;
+  float cX;
+  float cY;
+  float red;
+  color black;
+  float speedX;
+  float speedY;
+  float maxTop;
+  float minTop;
+ 
+  BlackBall () {
+    
+    cX = random(width);
+    cY = random(height);
+    r  = random(10,15);
+    
+    speedX = random (10, 15);
+    speedY = random (0); 
+    
+    maxTop = (5*height/6 +r);
+    minTop = (height-r);
+    
+    black = color(0);
+  }
+  
+  void displayBlackBall() {
+    behavior();
+    noStroke();
+    fill(black,210);
+    ellipse(cX,cY, r*2, r*2);
+  }
+  
+  void behavior(){
+    cX = cX + speedX;
+    if (cX >= (width-r))cX= 0;
+    
+  }
+  }
+
