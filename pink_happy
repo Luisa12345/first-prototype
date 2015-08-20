@@ -1,0 +1,62 @@
+class PinkBall  {  // happy feeling
+  
+  float r;
+  float rGrowth;
+  float cX;
+  float cY;
+  
+  color pink;
+  
+  float speedX;
+  float speedY;
+  float maxTop;
+  float minTop;
+ 
+  PinkBall () {
+    
+    cX = random(width);
+    cY = random(0, 3*height/4);
+    r  = random(20,50);
+    rGrowth= 0.1;
+    
+    speedX = random (4,6);
+    speedY = random (2,5); 
+    
+    maxTop = (3*height/4 +r);
+    minTop = (height-r);
+    
+    pink = color(random(220,225), random(90,3), random(158,129));
+  }
+  
+  void displayPinkBall() {
+    behavior();
+    noStroke();
+    fill(pink,210);
+    ellipse(cX,cY, r*2, r*2);
+  }
+  
+  void behavior(){
+    
+    //radius change
+    
+    r= r + rGrowth;
+    
+    if (( r > 60) || (r < 20)) rGrowth= -rGrowth;
+    
+    
+    
+    //horizontal movement
+    cX = cX + speedX;
+    if ((cX >= (width-r))||(cX <= r)) speedX=-speedX;
+    
+    //vertical movement
+    cY = cY + speedY;
+    if ( (cY > maxTop) || (cY < r) ) {
+      
+      speedY=-speedY;
+      
+      
+    
+  }
+  }
+}
