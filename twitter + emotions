@@ -1,0 +1,495 @@
+import twitter4j.conf.*;
+import twitter4j.*;
+import twitter4j.auth.*;
+import twitter4j.api.*;
+import java.util.*;
+
+Twitter twitter;
+String searchString = "Luisa_12345";
+List<Status> tweets;
+long latestStatusId = 595694808590585858L; 
+long lastDrawnId = 0; 
+int currentTweet;
+
+// blue triggers
+StringList blueTrigger;
+
+// pink triggers
+StringList pinkTrigger;
+
+// red triggers
+StringList redTrigger;
+
+// black triggers
+StringList blackTrigger;
+
+// purple triggers
+StringList purpleTrigger;
+/////////////////////////////////////////// end twitter part
+
+BlueBall []  BlueBallList;
+int lastBlueBall =0 ;
+int createdBlueBalls = 0;
+Boolean CreateNewBlueBalls = false;
+
+PinkBall []  PinkBallList;
+int lastPinkBall =0 ;
+int createdPinkBalls = 0;
+Boolean CreateNewPinkBalls = false;
+
+RedBall []  RedBallList;
+int lastRedBall =0 ;
+int createdRedBalls = 0;
+Boolean CreateNewRedBalls = false;
+
+BlackBall []  BlackBallList;
+int lastBlackBall =0 ;
+int createdBlackBalls = 0;
+Boolean CreateNewBlackBalls = false;
+
+PurpleBall []  PurpleBallList;
+int lastPurpleBall =0 ;
+int createdPurpleBalls = 0;
+Boolean CreateNewPurpleBalls = false;
+
+
+void setup (){
+  size(800, 800);
+  
+  blueTrigger = new StringList();  // sad, 
+ 
+blueTrigger.append("Sense of failure. Strong restraint.");
+blueTrigger.append("Emotional pain.") ;
+blueTrigger.append("Sense of failure. Strong restraint." );
+blueTrigger.append("Conflict between prudence and desires.") ;
+blueTrigger.append("Sense of alientation." );
+blueTrigger.append("Striving for love or belonging." );
+blueTrigger.append("Helpness, remorse, guilt." );
+blueTrigger.append("Seeking warmth and attention." );
+blueTrigger.append("Introversion" );
+blueTrigger.append("failure" );
+
+
+
+ pinkTrigger = new StringList();  // love, 
+ 
+pinkTrigger.append("Seeking solitude");
+pinkTrigger.append("Passion or creative mood. Emotional and tense.") ;
+pinkTrigger.append("Emotional overflow" );
+pinkTrigger.append("Attempting to realize dreams") ;
+pinkTrigger.append("emotions and impulses" );
+pinkTrigger.append("Positive communication." );
+pinkTrigger.append("Charisma, creativity, playfulness and flirtation. Warmth." );
+pinkTrigger.append("Sentimental, romantic, controlled by emotion" );
+pinkTrigger.append("Happiness" );
+pinkTrigger.append("admiration." );
+pinkTrigger.append("Hopes" );
+pinkTrigger.append("Enthusiasm" );
+pinkTrigger.append("appreciation" );
+pinkTrigger.append("belonging" );
+pinkTrigger.append("Communication" );
+pinkTrigger.append("Preaching" );
+pinkTrigger.append("Enthusiasm" );
+pinkTrigger.append("Empathy" );
+
+
+
+
+
+
+
+
+ redTrigger = new StringList();  //angry
+ 
+redTrigger.append("Vengeance, hatred, unforgiving. Anger.");
+redTrigger.append("Concern for survival and need to fight.");
+redTrigger.append("anger and bitterness");
+redTrigger.append("Outburst born out of vulnerability.");
+redTrigger.append("hate");
+redTrigger.append("Communication" );
+redTrigger.append("Verbal attack" );
+redTrigger.append("rejection" );
+redTrigger.append("jealousy" );
+redTrigger.append("combative" );
+redTrigger.append("unforgiving" );
+redTrigger.append("Anger" );
+redTrigger.append("Aggressiveness" );
+redTrigger.append("Passionate and combative" );
+redTrigger.append("Destructive" );
+
+
+
+
+
+
+ blackTrigger = new StringList();  //dominant
+ 
+blackTrigger.append("Vision, imagination, devoutness, ideology. Charisma.");
+blackTrigger.append("Missionary leadership. Stubborness");
+blackTrigger.append("Strong drive");
+blackTrigger.append("Assertiveness and ambition to achieve goals");
+blackTrigger.append("Optimistic leadership, charisma, pride.");
+blackTrigger.append("Goal-oriented anger.");
+blackTrigger.append("Possessiveness");
+blackTrigger.append("Manipulation");
+blackTrigger.append("stubbornness");
+blackTrigger.append("Fanaticism");
+blackTrigger.append("Conservative");
+blackTrigger.append("charismatic");
+blackTrigger.append("Assertive");
+blackTrigger.append("Communication");
+blackTrigger.append("Manipulative");
+blackTrigger.append("Authoritative");
+blackTrigger.append("Arrogance");
+blackTrigger.append("Commanding");
+blackTrigger.append("Arrogant");
+blackTrigger.append("superiority");
+blackTrigger.append("self-confidence");
+
+
+
+
+
+
+
+
+ purpleTrigger = new StringList();  //anxious
+ 
+purpleTrigger.append("sense of uncertainty");
+purpleTrigger.append("Coping with an emotional load. Concerns");
+purpleTrigger.append("Sense of distress.");
+purpleTrigger.append("Hidden or unexpressed emotions.");
+purpleTrigger.append("Concerns and conflict.");
+purpleTrigger.append("Mercy");
+purpleTrigger.append("Lack of confidence");
+purpleTrigger.append("conflict");
+
+
+  
+  //twitter
+     ConfigurationBuilder cb = new ConfigurationBuilder();
+    cb.setOAuthConsumerKey("L5UgowlwtEqIBFMkCCrtSJgNp");
+    cb.setOAuthConsumerSecret("rI7Qrggtw3mHrqlBlf1XgGkXDO4tY9C4WHRWxckBYH2mPpZnsN");
+    cb.setOAuthAccessToken("2776354544-PykX4P6qIYT6qxoZYqTCAKZyGngM5crjlM3GUTH");
+    cb.setOAuthAccessTokenSecret("j2FVBc0exCY5VIQIOgsFRH1zfGBxxX3Mepab0DzxFBxJs");
+   
+    TwitterFactory tf = new TwitterFactory(cb.build());
+    
+    twitter = tf.getInstance();
+    
+    getNewTweets();
+    
+    currentTweet = 0;
+    
+    thread("refreshTweets");
+    
+// end twitter
+
+  int maxBalls = 10000;
+   
+   
+  BlueBallList = new BlueBall[maxBalls];
+  
+  PinkBallList = new PinkBall[maxBalls];
+  
+  RedBallList = new RedBall[maxBalls];
+
+  BlackBallList = new BlackBall[maxBalls];
+  
+  PurpleBallList = new PurpleBall[maxBalls];
+}
+
+void draw () {
+background(255); 
+
+displayBlueBalls();
+
+displayPinkBalls();
+
+displayRedBalls();
+
+displayBlackBalls();
+
+displayPurpleBalls();
+
+
+//begin twitter part
+
+  for (Status status : tweets) 
+  {      
+        if (lastDrawnId < status.getId() )
+        {
+                fill(200);
+               
+                 String statusText = status.getText() ;
+                 println(statusText);
+                 println(blueTrigger.get(0));
+                 
+                 // creating blue stuff
+                 
+                 for( int i=0; i<blueTrigger.size(); i++){
+                  if (statusText.contains(blueTrigger.get(i))) 
+                  {
+                  CreateNewBlueBalls = true;
+                  createNewBlueBall(); 
+                  }}
+                  
+                   // creating pink stuff
+
+                  
+                   for( int i=0; i<pinkTrigger.size(); i++){
+                  if (statusText.contains(pinkTrigger.get(i))) 
+                  {
+                  CreateNewPinkBalls = true;
+                  createNewPinkBall(); 
+                  }}
+                  
+                    // creating red stuff
+
+                  
+                   for( int i=0; i<redTrigger.size(); i++){
+                  if (statusText.contains(redTrigger.get(i))) 
+                  {
+                  CreateNewRedBalls = true;
+                  createNewRedBall(); 
+                  }}
+                  
+                       // creating black stuff
+
+                  
+                   for( int i=0; i<blackTrigger.size(); i++){
+                  if (statusText.contains(blackTrigger.get(i))) 
+                  {
+                  CreateNewBlackBalls = true;
+                  createNewBlackBall(); 
+                  }}
+                  
+                          // creating purple stuff
+
+                  
+                   for( int i=0; i<purpleTrigger.size(); i++){
+                  if (statusText.contains(purpleTrigger.get(i))) 
+                  {
+                  CreateNewPurpleBalls = true;
+                  createNewPurpleBall(); 
+                  }}
+                  
+                text(status.getText(), random(width), random(height), 300, 200);
+                lastDrawnId = status.getId();
+                println(statusText); 
+        }     
+       else {
+        println("no new tweet");
+       }
+  }     
+        
+      //delay(250);
+      
+   //end twitter part
+
+}
+
+
+
+
+
+void getNewTweets(){
+    try 
+  {
+    Paging paging = new Paging(1, 10).sinceId(latestStatusId);
+                                
+      
+    Query query = new Query(searchString);// try to get tweets here
+      
+      
+      ResponseList<Status> result = twitter.getUserTimeline(paging);
+      
+       tweets = result;
+       
+        // requesting page 2, number of elements per page is 40
+    
+    for (Status status : tweets) {
+        latestStatusId = status.getId();
+        println(latestStatusId);
+    }
+       
+       
+     //  latestTweet = tweets.get(tweets.size());
+      // tweets.getId(latestTweet);
+       
+      // tweets.get(latestTweet) 
+
+  } 
+  catch (TwitterException te) 
+  {
+      System.out.println("Failed to search tweets: " + te.getMessage());
+      System.exit(-1);// deal with the case where we can't get them here
+  }
+
+}
+
+void refreshTweets(){
+  
+  while (true)
+    {
+        getNewTweets();
+
+        println("Updated Tweets"); 
+
+        delay(2500);
+    }
+
+}
+
+
+
+
+
+// creation of blue balls
+
+void createNewBlueBall() {
+  
+  if(CreateNewBlueBalls = true){
+  
+  lastBlueBall =  lastBlueBall + 1;
+ 
+  BlueBallList[lastBlueBall] = new BlueBall();
+  CreateNewBlueBalls = false;
+  } else return;
+ 
+}
+
+// creation of pink balls
+
+void createNewPinkBall() {
+  
+  if(CreateNewPinkBalls = true){
+  
+  lastPinkBall =  lastPinkBall + 1;
+ 
+  PinkBallList[lastPinkBall] = new PinkBall();
+  CreateNewPinkBalls = false;
+  } else return;
+ 
+}
+
+// creation of red balls
+
+void createNewRedBall() {
+  
+  if(CreateNewRedBalls = true){
+  
+  lastRedBall =  lastRedBall + 1;
+ 
+  RedBallList[lastRedBall] = new RedBall();
+  CreateNewRedBalls = false;
+  } else return;
+ 
+}
+
+// creation of red balls
+
+void createNewBlackBall() {
+  
+  if(CreateNewBlackBalls = true){
+  
+  lastBlackBall =  lastBlackBall + 1;
+ 
+  BlackBallList[lastBlackBall] = new BlackBall();
+  CreateNewBlackBalls = false;
+  } else return;
+ 
+}
+
+// creation of purple balls
+
+void createNewPurpleBall() {
+  
+  if(CreateNewPurpleBalls = true){
+  
+  lastPurpleBall =  lastPurpleBall + 1;
+ 
+  PurpleBallList[lastPurpleBall] = new PurpleBall();
+  CreateNewPurpleBalls = false;
+  } else return;
+ 
+}
+
+// display of blue balls
+
+
+void displayBlueBalls () {
+  if(lastBlueBall > 0) {
+  for (int i=1; i<= lastBlueBall; i++) {
+  BlueBallList[i].displayBlueBall();
+}} else return;
+
+}
+
+// display of pink balls
+
+
+void displayPinkBalls () {
+  if(lastPinkBall > 0) {
+  for (int i=1; i<= lastPinkBall; i++) {
+  PinkBallList[i].displayPinkBall();
+}} else return;
+
+}
+
+// display of red balls
+
+
+void displayRedBalls () {
+  if(lastRedBall > 0) {
+  for (int i=1; i<= lastRedBall; i++) {
+  RedBallList[i].displayRedBall();
+}} else return;
+
+}
+
+// display of black balls
+
+
+void displayBlackBalls () {
+  if(lastBlackBall > 0) {
+  for (int i=1; i<= lastBlackBall; i++) {
+  BlackBallList[i].displayBlackBall();
+}} else return;
+
+}
+
+void displayPurpleBalls () {
+  if(lastPurpleBall > 0) {
+  for (int i=1; i<= lastPurpleBall; i++) {
+  PurpleBallList[i].displayPurpleBall();
+}} else return;
+
+}
+
+void keyTyped() {
+  if (key == 'b') {
+   CreateNewBlueBalls = true;
+    createNewBlueBall(); 
+  }
+  
+    if (key == 'p') {
+   CreateNewPinkBalls = true;
+    createNewPinkBall(); 
+  }
+  
+    if (key == 'r') {
+   CreateNewRedBalls = true;
+    createNewRedBall(); 
+  }
+  
+      if (key == 'r') {
+   CreateNewBlackBalls = true;
+    createNewBlackBall(); 
+  }
+  
+       if (key == 'k') {
+   CreateNewPurpleBalls = true;
+    createNewPurpleBall(); 
+  }
+}
