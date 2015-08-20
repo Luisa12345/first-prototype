@@ -1,0 +1,46 @@
+class BlueBall  {  // sad feeling
+  
+  float r;
+  float cX;
+  float cY;
+  float red;
+  color blue;
+  float speedX;
+  float speedY;
+  float maxTop;
+  float minTop;
+ 
+  BlueBall () {
+    
+   cX = random(width);
+    cY = random(4*height/5, height);
+    r  = random(5,15);
+    
+    speedX = random (2,3);
+    speedY = random (0); 
+    
+    maxTop = (5*height/6 +r);
+    minTop = (height-r);
+    
+    blue = color(0, 0, random(200,250));
+  }
+  
+  void displayBlueBall() {
+    behavior();
+    noStroke();
+    fill(blue,210);
+    ellipse(cX,cY, r*2, r*2);
+  }
+  
+  void behavior(){
+     cX = cX + speedX;
+    if ((cX >= (width-r))||(cX <= r)) speedX=-speedX;
+    
+    cY = cY + speedY;
+    if ( (cY > minTop) || (cY < maxTop) ) {
+      
+      speedY=-speedY;
+    
+  }
+  }
+}
