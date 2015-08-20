@@ -1,0 +1,61 @@
+class RedBall  {  // angry feeling
+  
+  float r;
+  float rGrowth;
+  float cX;
+  float cY;
+  
+  color red;
+  float speedX;
+  float speedY;
+  float maxTop;
+  float minTop;
+ 
+  RedBall () {
+    
+    cX = random(width);
+    cY = random(0, height);
+    r  = random(20,50);
+    rGrowth= random (0.1, 5);
+    
+    speedX = random (5);
+    speedY = random (5); 
+    
+    maxTop = (5*height/6 +r);
+    minTop = (height-r);
+    
+    red = color(random(100,225), 0, 0);
+    
+  }
+  
+  void displayRedBall() {
+    behavior();
+    strokeWeight (0);
+    fill(red,210);
+    ellipse(cX,cY, r*2, r*2);
+  }
+  
+  void behavior(){
+    
+    //radius change
+    
+    r= r + rGrowth;
+    
+    if (( r > 60) || (r < 20)) rGrowth= -rGrowth;
+    
+    
+    
+    //horizontal movement
+    //cX = cX + speedX;
+    //if ((cX >= (width-r))||(cX <= r)) speedX=-speedX;
+    
+    //vertical movement
+    //cY = cY + speedY;
+    //if ( (cY > (height-r)) || (cY < r) ) {
+      
+      //speedY=-speedY;}
+      
+      
+    
+  }
+  }
