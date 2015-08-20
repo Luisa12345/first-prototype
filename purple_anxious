@@ -1,0 +1,67 @@
+class PurpleBall  {  // anxious feeling
+  
+  float r;
+  float xGrowth;
+  float yGrowth;
+
+  float cX;
+  float cY;
+  
+  color red;
+  float speedX;
+  float speedY;
+  float maxTop;
+  float minTop;
+ 
+  PurpleBall () {
+    
+    cX = random(width);
+    cY = random( height);
+    r  = random(10,35);
+    xGrowth= random (5, 10);
+    yGrowth= random (5, 10);
+    
+    speedX = random (5);
+    speedY = random (5); 
+    
+    maxTop = (5*height/6 +r);
+    minTop = (height-r);
+    
+    red = color(random(100,225), 0, 0);
+    
+  }
+  
+  void displayPurpleBall() {
+    behavior();
+    strokeWeight (0);
+    fill(random(100,225), 0, random(100,225),random(100,225));
+    ellipse(cX,cY, r*2, r*2);
+  }
+  
+  void behavior(){
+    
+    //radius change
+    
+  
+    
+    
+    
+    //horizontal movement
+    cX = cX + xGrowth;
+    
+    cY = cY + yGrowth;
+    
+    xGrowth= -xGrowth;
+    yGrowth= -yGrowth;
+    //if ((cX >= (width-r))||(cX <= r)) speedX=-speedX;
+    
+    //vertical movement
+    //cY = cY + speedY;
+    //if ( (cY > (height-r)) || (cY < r) ) {
+      
+      //speedY=-speedY;}
+      
+      
+    
+  }
+  }
